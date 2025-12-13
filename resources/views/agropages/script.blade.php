@@ -3,3 +3,13 @@
 <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{asset('js/templatemo.js')}}"></script>
 <script src="{{asset('js/custom.js')}}"></script>
+<script>
+    function scrollCategories(direction) {
+        const slider = document.getElementById('categorySlider');
+        const scrollAmount = 300;
+        slider.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+</script>
