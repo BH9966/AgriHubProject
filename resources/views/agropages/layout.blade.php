@@ -12,7 +12,7 @@
 
 
     <!-- Header -->
-    @include('agropages.header')
+    @yield('header')
     <!-- Close Header -->
 
     <!-- Modal -->
