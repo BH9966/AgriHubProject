@@ -4,7 +4,7 @@
     <div class="container d-flex justify-content-between align-items-center">
 
         <a class="navbar-brand text-success logo h1 align-self-center" href="index.html">
-            AgroHub
+            AgriHub
         </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,7 @@
                         <a class="nav-link" href="contact.html">Contact</a>
                     </li>
                     {{-- Categories Dropdown --}}
-    <li class="nav-item dropdown">
+       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle"
            href="#"
            id="categoryDropdown"
@@ -68,8 +68,8 @@
                         <button type="button" class="btn btn-light ">Login</button>
                         {{-- <a class="nav-link" href="contact.html"></a> </li>--}}
                     
-                    <li class="nav-item">
-                        <button class="btn btn-success"
+                    <li class="nav-item ">
+                        <button class="btn btn-success mt-1"
                                 data-bs-toggle="modal"
                                 data-bs-target="#loginModal">
                             Login
@@ -150,14 +150,19 @@
                 
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Phone</label>
-                                            <input type="text" class="form-control rounded-pill">
+                                            <input type="text" placeholder="+255790......." class="form-control rounded-pill">
                                         </div>
                                     </div>
                 
                                     <div class="mb-3">
                                         <label class="form-label">Email</label>
-                                        <input type="email" class="form-control rounded-pill" required>
+                                        <input type="email" class="form-control rounded-pill" placeholder="example@gmail.com" required>
                                     </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Address</label>
+                                        <input type="text" class="form-control rounded-pill" required>
+                                    </div>
+                
                 
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
