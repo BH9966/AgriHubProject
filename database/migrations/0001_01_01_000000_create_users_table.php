@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->string('password');
-            $table->enum('role',['farmer','buyer','shop','both'])->default('buyer');
+            // $table->enum('role',['farmer','buyer','shop','both'])->default('buyer');
+            $table->enum('role',['buyer','seller','both'])->default('buyer');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
