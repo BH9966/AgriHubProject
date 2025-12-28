@@ -20,6 +20,7 @@ return new class extends Migration
             // $table->enum('role',['farmer','buyer','shop','both'])->default('buyer');
             $table->enum('role',['buyer','seller','both'])->default('buyer');
             $table->timestamp('email_verified_at')->nullable();
+            // $table->enum('role',['buyer','farmer','shop','both','admin'])->default('buyer');
             $table->rememberToken();
             $table->timestamps();
         });

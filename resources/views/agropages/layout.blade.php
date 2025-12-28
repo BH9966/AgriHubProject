@@ -42,6 +42,7 @@
     <!-- Start Script -->
     @include('agropages.script')
     <!-- End Script -->
+    
 </body>
 
 </html>
