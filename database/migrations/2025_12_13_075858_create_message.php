@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('message', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sender_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('buyer_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('product_id')->nullable()->constrained('product')->cascadeOnDelete();
             $table->text('message');
+            $table->enum('status', ['sent', 'read', 'replied'])->default('sent');
             $table->timestamps();
         });
     }
