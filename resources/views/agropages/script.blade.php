@@ -13,3 +13,17 @@
         });
     }
 </script>
+<script>
+    document.querySelectorAll('.category-item').forEach(button => {
+        button.addEventListener('click', function () {
+            const target = document.querySelector(this.dataset.bsTarget);
+    
+            document.querySelectorAll('.submenu').forEach(menu => {
+                if (menu !== target && menu.classList.contains('show')) {
+                    new bootstrap.Collapse(menu, { toggle: true });
+                }
+            });
+        });
+    });
+    </script>
+    
