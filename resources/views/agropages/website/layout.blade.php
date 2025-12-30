@@ -251,7 +251,7 @@
 
       <div class="logo">
         <a href="index.html">
-          <img src="assets/images/logo.png" alt="Uomo" class="logo__image d-block" />
+          <img src="{{asset('website/images/logo.png')}}" alt="logo" class="logo__image d-block" />
         </a>
       </div>
 
