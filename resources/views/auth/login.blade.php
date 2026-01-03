@@ -45,6 +45,12 @@
                 <span class="text-secondary">No account yet?</span>
                 <a href="{{route('register')}}" class="btn-text js-show-register">Create Account</a>
               </div>
+              @if(session('success'))
+                <div class="alert alert-success">
+                {{ session('success') }}
+                </div>
+                @endif
+
             </form>
           </div>
         </div>

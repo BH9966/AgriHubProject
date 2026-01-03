@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+
 
 class AdminController extends Controller
 {
@@ -14,6 +21,87 @@ class AdminController extends Controller
         //
         return view('admin.index');
     }
+
+
+    public function category()
+    { 
+        $categories=Category::orderBy('id','DESC')->paginate(3);
+        return view('admin.category',compact('categories'));
+    }
+
+    public function addcategory(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:categories,slug',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+       $category =new Category();
+       $category->name =$request->name;
+       $category->slug =str::slug($request->slug);
+       $image =$request->file('image');
+       $file_extension=$request->file('image')->extension();
+       $file_name=Carbon::now()->timestamp.'.'.$file_extension;
+       $this->getcategoryimage($image,$file_name);
+       $category->image=$file_name;
+       $category->save();
+
+        return redirect()->back()->with('success', 'Category added successfully!');
+    }
+
+    public function getcategoryimage($image, $imageName)
+{
+    $manager = new ImageManager(new Driver());
+
+    $img = $manager->read($image->getPathname());
+    $img->cover(124, 124);
+
+    $img->save(public_path('uploads/categories/' . $imageName));
+}
+
+
+
+public function deleteCategory($id)
+{
+    $category = Category::findOrFail($id);
+
+    if ($category->image && file_exists(public_path('uploads/categories/' . $category->image))) {
+        unlink(public_path('uploads/categories/' . $category->image));
+    }
+
+    $category->delete();
+
+    return redirect()->back()->with('success', 'Category deleted successfully!');
+}
+
+
+public function updateCategory(Request $request, $id)
+{
+    $category = Category::findOrFail($id);
+
+   
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'slug' => 'required|string|max:255|unique:categories,slug,' . $id,
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+    ]);
+
+   
+    $category->name = $request->name;
+    $category->slug = $request->slug;
+
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('categories', 'public');
+        $category->image = $imagePath;
+    }
+
+    $category->save();
+
+    return redirect()->back()->with('successCategory', 'Category updated successfully');
+}
+
+
 
     /**
      * Show the form for creating a new resource.

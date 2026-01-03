@@ -11,12 +11,126 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/style.css') }}">
-    <link rel="stylesheet" href="font/fonts.css">
-    <link rel="stylesheet" href="icon/style.css">
-    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="{{ asset('admin/font/fonts.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/icon/style.css') }}">
+    <link rel="shortcut icon" href="{{ asset('admin/images/favicon.ico') }}">
     <link rel="apple-touch-icon-precomposed" href="{{ asset('admin/images/favicon.ico') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/sweetalert.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/custom.css') }}">
+    {{-- sweet alert --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script></style>
+    <style>
+        .image-preview {
+    width: 140px;
+    height: 140px;
+    border: 1px dashed #ccc;
+    border-radius: 12px;          /* curved container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;          /* curved image */
+}
+
+        /* start preview */
+        .custom-file-input {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 48px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.custom-file-input input {
+    display: none;
+}
+
+.file-placeholder {
+    color: #999;
+    font-size: 14px;
+}
+/* end */
+
+.custom-file-input {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 48px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.custom-file-input input {
+    display: none;
+}
+
+.custom-file-input .file-placeholder {
+    color: #999;
+    font-size: 14px;
+}
+
+
+
+       .modal-backdrop {
+    background-color: transparent !important;
+}
+
+.modal-backdrop.show {
+    opacity: 0 !important;
+}
+
+/* Bigger & rounded modal */
+#addCategoryModal .modal-content {
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Header styling */
+#addCategoryModal .modal-header {
+    border-bottom: none;
+    padding: 20px 30px;
+}
+
+/* Body spacing */
+#addCategoryModal .modal-body {
+    padding: 30px;
+}
+
+/* Footer buttons spacing */
+#addCategoryModal .tf-button {
+    border-radius: 12px;
+}
+
+/* Input rounding */
+#addCategoryModal input,
+#addCategoryModal .form-control {
+    border-radius: 10px;
+}
+
+.modal.fade .modal-dialog {
+    transform: scale(0.95);
+    transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: scale(1);
+}
+
+ </style>
    @stack('styles')
 </head>
 <body class="body">
@@ -97,13 +211,8 @@
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="sub-menu-item">
-                                            <a href="add-category.html" class="">
-                                                <div class="text">New Category</div>
-                                            </a>
-                                        </li>
-                                        <li class="sub-menu-item">
-                                            <a href="categories.html" class="">
-                                                <div class="text">Categories</div>
+                                            <a href="{{route('categorylist')}}" class="">
+                                                <div class="text">Categories List</div>
                                             </a>
                                         </li>
                                     </ul>
@@ -469,6 +578,54 @@
     <script src="{{ asset('admin/js/apexcharts/apexcharts.js') }}"></script>
     <script src="{{ asset('admin/js/main.js') }}"></script>
     <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const previewBox = document.getElementById('previewBox');
+            const previewImg = document.getElementById('previewImage');
+        
+            if (file) {
+                previewImg.src = URL.createObjectURL(file);
+                previewBox.style.display = 'flex';
+            }
+        }
+        </script>
+        
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: @json(session('success')),
+            showConfirmButton: false,
+            timer: 1500
+        });
+    </script>
+    @endif
+    
+{{-- live preview --}}
+
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('imagePreview');
+        const placeholder = input.previousElementSibling;
+    
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+    
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+    
+            reader.readAsDataURL(input.files[0]);
+            placeholder.textContent = input.files[0].name;
+        }
+    }
+    </script>
+    {{--  end live pre view--}}
+   
+    <script>
         (function ($) {
 
             var tfLineChart = (function () {
@@ -566,6 +723,97 @@
             jQuery(window).on("resize", function () { });
         })(jQuery);
     </script>
+
+
+
+{{-- delete category --}}
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    
+        document.querySelectorAll('.delete-btn').forEach(item => {
+    
+            item.addEventListener('click', function () {
+    
+                const form = this.closest('.delete-form');
+    
+                Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+
+    width: '520px',             
+    padding: '2rem',            
+
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "Cancel",
+
+    customClass: {
+        title: 'swal-title-lg',
+        popup: 'swal-popup-lg',
+        confirmButton: 'swal-btn-lg',
+        cancelButton: 'swal-btn-lg'
+    }
+}).then((result) => {
+    
+                    if (result.isConfirmed) {
+                        form.submit(); 
+                    }
+    
+                });
+    
+            });
+    
+        });
+    
+    });
+    </script>
+
+    {{-- edit script (category) --}}
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".editBtn").forEach(btn => {
+                btn.addEventListener("click", function() {
+                  
+                    const id    = this.dataset.id;
+                    const name  = this.dataset.name;
+                    const slug  = this.dataset.slug;
+                    const image = this.dataset.image;
+        
+                   
+                    document.getElementById("category_id").value = id;
+                    document.getElementById("category_name").value = name;
+                    document.getElementById("category_slug").value = slug;
+        
+                    const previewImage = document.getElementById("imagePreview");
+                    if(image) {
+                        previewImage.src = image;
+                        previewImage.style.display = "block";
+                    } else {
+                        previewImage.src = "";
+                        previewImage.style.display = "none";
+                    }
+        
+                  
+                    if(id) {
+                        document.getElementById("categoryForm").action = "/admin/categories/" + id + "/update";
+                    } else {
+                        document.getElementById("categoryForm").action = "{{ route('addcategory') }}";
+                    }
+        
+                   
+                    var modal = new bootstrap.Modal(document.getElementById('addCategoryModal'));
+                    modal.show();
+                });
+            });
+        });
+        </script>
 </body>
 
   @stack('scripts')

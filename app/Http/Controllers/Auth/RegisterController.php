@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Auth;
 
 
 class RegisterController extends Controller
@@ -30,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
@@ -82,4 +83,13 @@ class RegisterController extends Controller
             'role'=>$data['role'],
         ]);
     }
+
+    protected function registered($request, $user)
+    {
+        Auth::logout();
+    
+        return redirect('/login')
+            ->with('success', 'Account created successfully. Please login.');
+    }
+
 }
