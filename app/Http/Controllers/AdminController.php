@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Slide;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -101,7 +102,49 @@ public function updateCategory(Request $request, $id)
     return redirect()->back()->with('successCategory', 'Category updated successfully');
 }
 
+   public function slides(){
+    $slides =Slide::orderBy('id','DESC')->paginate(5);
+    return view('admin.slide',compact('slides'));
+   }
 
+   public function addslides()
+   {
+    return view('admin.addslide');
+   }
+   public function slideStore(Request $request)
+   {
+    $request->validate([
+        'tagline'=>'required',
+        'title'=>'required',
+        'subtitle'=>'required',
+        'link'=>'required',
+        'status'=>'required',
+        'image'=>'required|mimes:png,jpg,jpeg|max:2048',
+    ]);
+       $slide= new Slide();
+       $slide->tagline=$request->tagline;
+       $slide->title=$request->title;
+       $slide->subtitle=$request->subtitle;
+       $slide->link=$request->link;
+       $slide->status=$request->status;
+
+       $image =$request->file('image');
+       $file_extension=$request->file('image')->extension();
+       $file_name=Carbon::now()->timestamp.'.'.$file_extension;
+       $this->generateslideimage($image,$file_name);
+       $slide->image=$file_name;
+       $slide->save();
+       return redirect()->route('admin.slides')->with('status','slide Added Successfully');
+}
+   public function generateslideimage($image,$imageName)
+   {
+    $manager = new ImageManager(new Driver());
+
+    $img = $manager->read($image->getPathname());
+    $img->cover(950, 690);
+
+    $img->save(public_path('uploads/slides/' . $imageName));
+   }
 
     /**
      * Show the form for creating a new resource.
@@ -117,6 +160,7 @@ public function updateCategory(Request $request, $id)
     public function store(Request $request)
     {
         //
+        return " Hellow";
     }
 
     /**

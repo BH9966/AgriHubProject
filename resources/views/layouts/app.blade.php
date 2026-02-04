@@ -8,6 +8,64 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <style>
+  
+     /* ROUND HERO SLIDER */
+.round-slider {
+    width: 610px;
+    height: 610px;
+    border-radius: 50%;
+    overflow: hidden;
+    background:transparent;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* IMAGE */
+.round-slider-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+      .round-slider {
+    border: 6px solid rgba(0,0,0,0.05);
+
+}
+@media (max-width: 1200px) {
+    .round-slider {
+        width: 460px;
+        height: 460px;
+    }
+}
+
+@media (max-width: 992px) {
+    .round-slider {
+        width: 360px;
+        height: 360px;
+    }
+
+    .slideshow-character {
+        position: relative !important;
+        top: auto !important;
+        transform: none !important;
+        margin: 40px auto 0;
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .round-slider {
+        width: 260px;
+        height: 260px;
+    }
+}
+
+
+    </style>
 
    @include('agropages.website.style')
    @stack('styles')
@@ -471,13 +529,20 @@
   
             
   
-            <a href="wishlist.html" class="header-tools__item">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <use href="#icon_heart" />
-              </svg>
+            @auth
+            <a href="{{ route('wishlist.index') }}" class="header-tools__item">
+        @else
+            <a href="{{ route('login') }}"
+               class="header-tools__item"
+               title="Login to save favorites">
+        @endauth
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <use href="#icon_heart" />
+                </svg>
             </a>
+        
   
-            <a href="cart.html" class="header-tools__item header-tools__cart">
+            <a href="{{route('cart.index')}}" class="header-tools__item header-tools__cart">
               <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <use href="#icon_cart" />

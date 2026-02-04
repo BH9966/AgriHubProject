@@ -67,16 +67,20 @@
                         class="form-control  @error('role') is-invalid @enderror"
                         name="role"
                         required>
+                        $table->enum('role',['','','','both','admin'])->default('buyer');
                     <option value="">-- Select Role --</option>
-                    <option value="seller" {{ old('role') == 'seller' ? 'selected' : '' }}>
-                        Seller
-                    </option>
                     <option value="buyer" {{ old('role') == 'buyer' ? 'selected' : '' }}>
                         Buyer
                     </option>
-                    <option value="both" {{ old('role') == 'both' ? 'selected' : '' }}>
-                        Both
+                    <option value="farmer" {{ old('role') == 'farmer' ? 'selected' : '' }}>
+                        Farmer
                     </option>
+                    <option value="shop" {{ old('role') == 'shop' ? 'selected' : '' }}>
+                        Shop
+                    </option>
+                    {{-- <option value="both" {{ old('role') == 'both' ? 'selected' : '' }}>
+                        Both
+                    </option> --}}
                 </select>
             
                 <label for="role">Role</label>

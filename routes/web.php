@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('homepage');
-
+Route::get('/cart',[CartController::class  ,'index'])->name('cart.index');
 Route::middleware(['auth'])->group(function(){
    Route::get('/user-account',[UserController::class ,'index'])->name('useraccount');
 });
@@ -29,5 +30,11 @@ Route::middleware(['auth',AuthAdmin::class])->group(function(){
     Route::post('/admin/addcategory',[AdminController::class , 'addcategory'])->name('addcategory');
     Route::delete('/admin/categories/{id}', [AdminController::class, 'deleteCategory'])->name('admin.categories.deleteCategory');
     Route::post('/admin/categories/{id}/update', [AdminController::class, 'updateCategory'])->name('admin.categories.update');
+
+    Route::get('admin/slides',[AdminController::class ,'slides'])->name('admin.slides');
+    Route::get('admin/addslide',[AdminController::class , 'addslides'])->name('admin.addslide');
+    Route::post('admin/slide/store',[AdminController::class ,'slideStore'])->name('admin.slidestore');
+
+    Route::post('admin/slide/whistlist',[AdminController::class ,'store'])->name('wishlist.index');
 
  });

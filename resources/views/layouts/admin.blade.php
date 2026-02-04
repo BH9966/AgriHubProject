@@ -237,7 +237,7 @@
                                     </ul>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="slider.html" class="">
+                                    <a href="{{ route('admin.slides') }}" class="">
                                         <div class="icon"><i class="icon-image"></i></div>
                                         <div class="text">Slider</div>
                                     </a>
@@ -601,7 +601,17 @@
         });
     </script>
     @endif
-    
+    @if(session(key: 'status'))
+    <script>
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: @json(session('status')),
+            showConfirmButton: false,
+            timer: 1500
+        });
+    </script>
+    @endif
 {{-- live preview --}}
 
 <script>
@@ -755,7 +765,7 @@
     customClass: {
         title: 'swal-title-lg',
         popup: 'swal-popup-lg',
-        confirmButton: 'swal-btn-lg',
+        confirmButton: 'swal-btn-lx',
         cancelButton: 'swal-btn-lg'
     }
 }).then((result) => {
